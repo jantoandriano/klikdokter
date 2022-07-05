@@ -70,7 +70,11 @@ function MainPage() {
         window.location.reload();
       }
     } catch (error) {
-      console.log(error);
+      MySwal.fire({
+        icon: "error",
+        title: `${error}`,
+      });
+      navigate("/login", { replace: true });
     }
   };
 

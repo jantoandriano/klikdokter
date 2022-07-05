@@ -32,32 +32,46 @@ export const getProductListBySku = createAsyncThunk(
         }
       );
       return res.data;
-    } catch (error) {}
+    } catch (error) {
+      const errorMessage = error?.response?.data?.error;
+      if (errorMessage.includes("token")) {
+        localStorage.removeItem("token");
+        throw Error("Token expired");
+      }
+    }
   }
 );
 
 export const deleteItem = async (params) => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const formData = new FormData();
-  formData.append("sku", params.sku);
-  formData.append("product_name", params.product_name);
-  formData.append("qty", params.qty);
-  formData.append("price", params.price);
-  formData.append("unit", params.unit);
-  formData.append("status", params.status);
+    const formData = new FormData();
+    formData.append("sku", params.sku);
+    formData.append("product_name", params.product_name);
+    formData.append("qty", params.qty);
+    formData.append("price", params.price);
+    formData.append("unit", params.unit);
+    formData.append("status", params.status);
 
-  const res = await axios.post(
-    "https://hoodwink.medkomtek.net/api/item/delete",
-    formData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const res = await axios.post(
+      "https://hoodwink.medkomtek.net/api/item/delete",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return res;
+  } catch (error) {
+    const errorMessage = error?.response?.data?.error;
+    if (errorMessage.includes("token")) {
+      localStorage.removeItem("token");
+      throw Error("Token expired");
     }
-  );
-
-  return res;
+  }
 };
 
 export const updateItem = async (params) => {
@@ -83,7 +97,13 @@ export const updateItem = async (params) => {
     );
 
     return res;
-  } catch (error) {}
+  } catch (error) {
+    const errorMessage = error?.response?.data?.error;
+    if (errorMessage.includes("token")) {
+      localStorage.removeItem("token");
+      throw Error("Token expired");
+    }
+  }
 };
 
 export const addItem = async (params) => {
@@ -108,7 +128,13 @@ export const addItem = async (params) => {
       }
     );
     return res;
-  } catch (error) {}
+  } catch (error) {
+    const errorMessage = error?.response?.data?.error;
+    if (errorMessage.includes("token")) {
+      localStorage.removeItem("token");
+      throw Error("Token expired");
+    }
+  }
 };
 
 export const itemsSlice = createSlice({

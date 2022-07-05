@@ -22,8 +22,6 @@ export const loginUser = async (params) => {
       data: { token },
     } = response;
 
-    console.log(response);
-
     localStorage.setItem("token", token);
 
     return token;
