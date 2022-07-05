@@ -47,7 +47,15 @@ function MainPage() {
   };
 
   const searchProduct = async (query) => {
-    dispatch(getProductListBySku(query));
+    try {
+      dispatch(getProductListBySku(query));
+    } catch (error) {
+      MySwal.fire({
+        icon: "error",
+        title: `${error}`,
+      });
+      navigate("/login", { replace: true });
+    }
   };
 
   const addProduct = async (product) => {
@@ -58,7 +66,11 @@ function MainPage() {
         window.location.reload();
       }
     } catch (error) {
-      console.log(error);
+      MySwal.fire({
+        icon: "error",
+        title: `${error}`,
+      });
+      navigate("/login", { replace: true });
     }
   };
 
@@ -88,23 +100,24 @@ function MainPage() {
     } catch (error) {
       MySwal.fire({
         icon: "error",
-        title: `${error?.response?.data?.error}`,
+        title: `${error}`,
       });
+      navigate("/login", { replace: true });
     }
   };
 
   const deleteModal = (product) => {
-    setModal("delete");
+    setModal("Delete Product");
     setCurrentProduct(product);
   };
 
   const updateModal = (product) => {
-    setModal("update");
+    setModal("Edit Product");
     setCurrentProduct(product);
   };
 
   const addModal = () => {
-    setModal("add");
+    setModal("Add Product");
   };
 
   const handleNavigate = (event) => {
@@ -144,21 +157,21 @@ function MainPage() {
       </main>
       {activeModal.active && (
         <Modal activeModal={activeModal}>
-          {activeModal.name === "add" && (
+          {activeModal.name === "Add Product" && (
             <AddProduct
               currentProduct={currentProduct}
               handleSubmit={addProduct}
               setActiveModal={setActiveModal}
             />
           )}
-          {activeModal.name === "update" && (
+          {activeModal.name === "Edit Product" && (
             <UpdateProduct
               currentProduct={currentProduct}
               handleSubmit={updateProduct}
               setActiveModal={setActiveModal}
             />
           )}
-          {activeModal.name === "delete" && (
+          {activeModal.name === "Delete Product" && (
             <DeleteProduct
               currentProduct={currentProduct}
               handleSubmit={deleteProduct}
