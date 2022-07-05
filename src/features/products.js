@@ -37,6 +37,8 @@ export const getProductListBySku = createAsyncThunk(
       if (errorMessage.includes("token")) {
         localStorage.removeItem("token");
         throw Error("Token expired");
+      } else {
+        throw Error("Cannot get product list by sku");
       }
     }
   }
@@ -70,6 +72,8 @@ export const deleteItem = async (params) => {
     if (errorMessage.includes("token")) {
       localStorage.removeItem("token");
       throw Error("Token expired");
+    } else {
+      throw Error("Cannot delete product");
     }
   }
 };
@@ -102,6 +106,8 @@ export const updateItem = async (params) => {
     if (errorMessage.includes("token")) {
       localStorage.removeItem("token");
       throw Error("Token expired");
+    } else {
+      throw Error("Cannot update product");
     }
   }
 };
@@ -133,6 +139,8 @@ export const addItem = async (params) => {
     if (errorMessage.includes("token")) {
       localStorage.removeItem("token");
       throw Error("Token expired");
+    } else {
+      throw Error("Cannot add product");
     }
   }
 };
